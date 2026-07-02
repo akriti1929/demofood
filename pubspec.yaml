@@ -1,0 +1,133 @@
+name: admin_panel
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  get: ^4.7.3
+  flutter_svg: ^2.2.3
+  fluttertoast: ^9.0.0
+  provider: ^6.1.5+1
+  shared_preferences: ^2.5.4
+  flutter_screenutil: ^5.9.3
+  nb_utils: ^7.2.0
+  image_picker: ^1.2.1
+  syncfusion_flutter_charts: ^32.1.22
+
+  file_picker: ^10.3.8
+  intl: ^0.20.2
+  html: ^0.15.6
+  dotted_border: ^3.1.0
+  uuid: ^4.5.2
+  geocoding: ^4.0.0
+  timelines_plus: ^1.0.8
+  http: ^1.6.0
+  geolocator: ^14.0.1
+
+
+  flutter_rating_bar: ^4.0.1
+  percent_indicator: ^4.2.5
+  dropdown_search: ^6.0.2
+  shimmer: ^3.0.0
+  country_code_picker: ^3.4.1
+
+  #Firebase
+  firebase_auth: ^6.1.3
+  firebase_core: ^4.3.0
+  firebase_messaging: ^16.1.0
+  firebase_storage: ^13.0.5
+  cached_network_image: ^3.4.1
+  syncfusion_flutter_datepicker: ^32.1.22
+  flutter_easyloading: ^3.0.5
+  flex_color_picker:
+  flutter_custom_text_input_formatter: ^0.0.4
+  geoflutterfire2:
+
+  googleapis_auth: ^2.0.0
+  flutter_dash: ^1.0.0
+
+  #  location_picker_flutter_map
+  location: ^8.0.1
+  latlong2: ^0.9.1
+  url_launcher: ^6.3.2
+  flutter_map_location_marker: ^10.2.0
+  flutter_map_cancellable_tile_provider: ^3.1.1
+
+  html_editor_enhanced:
+    path: ./html_editor_enhanced
+  google_maps_flutter: ^2.14.0
+  flutter_map: ^8.2.2
+
+
+dependency_overrides:
+  intl: ^0.20.2
+  cloud_firestore: ^6.1.1
+  archive: ^3.6.1
+  lottie: ^3.3.2
+  excel: ^4.0.6
+  fluttertoast: ^9.0.0
+  geolocator:
+  http:
+
+dev_dependencies:
+  flutter_lints:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/fonts/
+    - assets/image/
+    - assets/icons/
+    - assets/new_icon/
+    - assets/json/
+    - assets/animation/
+
+  fonts:
+    - family: Satoshi-Black
+      fonts:
+        - asset: assets/fonts/Satoshi-Black.otf
+
+    - family: Satoshi-BlackItalic
+      fonts:
+        - asset: assets/fonts/Satoshi-BlackItalic.otf
+
+    - family: Satoshi-Bold
+      fonts:
+        - asset: assets/fonts/Satoshi-Bold.otf
+
+    - family: Satoshi-BoldItalic
+      fonts:
+        - asset: assets/fonts/Satoshi-BoldItalic.otf
+
+    - family: Satoshi-Italic
+      fonts:
+        - asset: assets/fonts/Satoshi-Italic.otf
+
+    - family: Satoshi-Light
+      fonts:
+        - asset: assets/fonts/Satoshi-Light.otf
+
+    - family: Satoshi-LightItalic
+      fonts:
+        - asset: assets/fonts/Satoshi-LightItalic.otf
+
+    - family: Satoshi-Medium
+      fonts:
+        - asset: assets/fonts/Satoshi-Medium.otf
+
+    - family: Satoshi-MediumItalic
+      fonts:
+        - asset: assets/fonts/Satoshi-MediumItalic.otf
+
+    - family: Satoshi-Regular
+      fonts:
+        - asset: assets/fonts/Satoshi-Regular.otf
