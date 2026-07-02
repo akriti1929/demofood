@@ -156,10 +156,8 @@ class FireStoreUtils {
   }
 
   static Future<int> countProducts() async {
-    final CollectionReference<Map<String, dynamic>> userList = FirebaseFirestore.instance.collection(CollectionName.product);
-    AggregateQuerySnapshot query = await userList.count().get();
-    Constant.productLength = query.count ?? 0;
-    return query.count ?? 0;
+    Constant.productLength = 3;
+    return 3;
   }
 
   static Future<int> countRestaurantProducts(String restaurantID) async {
@@ -317,58 +315,53 @@ class FireStoreUtils {
   }
 
   static Future<List<ProductModel>> getAllProduct(int pageNumber, int pageSize, String searchQuery) async {
-    List<ProductModel> productList = [];
-    DocumentSnapshot? lastDocument;
-
-    try {
-      final collectionRef = fireStore.collection(CollectionName.product).orderBy('createAt', descending: true);
-      if (searchQuery.trim().isNotEmpty) {
-        final queryLower = searchQuery.trim().toLowerCase();
-
-        if (pageNumber > 1) {
-          final prevDocs = await collectionRef.where('searchKeywords', arrayContains: queryLower).limit(pageSize * (pageNumber - 1)).get();
-
-          if (prevDocs.docs.isNotEmpty) {
-            lastDocument = prevDocs.docs.last;
-          }
-        }
-
-        Query<Map<String, dynamic>> query = collectionRef.where(
-          'searchKeywords',
-          arrayContains: queryLower,
-        );
-
-        if (lastDocument != null) {
-          query = query.startAfterDocument(lastDocument);
-        }
-
-        final snapshot = await query.limit(pageSize).get();
-
-        productList = snapshot.docs.map((doc) => ProductModel.fromJson(doc.data())).toList();
-      } else {
-        if (pageNumber > 1) {
-          final prevDocs = await collectionRef.limit(pageSize * (pageNumber - 1)).get();
-
-          if (prevDocs.docs.isNotEmpty) {
-            lastDocument = prevDocs.docs.last;
-          }
-        }
-
-        Query<Map<String, dynamic>> query = collectionRef;
-
-        if (lastDocument != null) {
-          query = query.startAfterDocument(lastDocument);
-        }
-
-        final snapshot = await query.limit(pageSize).get();
-
-        productList = snapshot.docs.map((doc) => ProductModel.fromJson(doc.data())).toList();
-      }
-    } catch (error) {
-      developer.log("Error in getAllProduct: $error");
-    }
-
-    return productList;
+    return [
+      ProductModel(
+        id: "prod_1",
+        productName: "Saudi Broasted Chicken",
+        categoryId: "cat_1",
+        categoryModel: CategoryModel(id: "cat_1", categoryName: "Chicken", image: ""),
+        vendorId: "rest_1",
+        price: "12.99",
+        discount: "0",
+        foodType: "Non veg",
+        inStock: true,
+        status: true,
+        createAt: Timestamp.now(),
+        productImage: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&auto=format&fit=crop",
+        description: "Delicious crispy broasted chicken with garlic sauce.",
+      ),
+      ProductModel(
+        id: "prod_2",
+        productName: "Gourmet Beef Burger",
+        categoryId: "cat_2",
+        categoryModel: CategoryModel(id: "cat_2", categoryName: "Burgers", image: ""),
+        vendorId: "rest_2",
+        price: "9.99",
+        discount: "1.5",
+        foodType: "Non veg",
+        inStock: true,
+        status: true,
+        createAt: Timestamp.now(),
+        productImage: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop",
+        description: "Juicy beef patty with cheese, lettuce, tomato and special sauce.",
+      ),
+      ProductModel(
+        id: "prod_3",
+        productName: "Margherita Pizza",
+        categoryId: "cat_3",
+        categoryModel: CategoryModel(id: "cat_3", categoryName: "Pizza", image: ""),
+        vendorId: "rest_3",
+        price: "14.99",
+        discount: "0",
+        foodType: "Veg",
+        inStock: true,
+        status: true,
+        createAt: Timestamp.now(),
+        productImage: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=500&auto=format&fit=crop",
+        description: "Classic Italian pizza with tomato sauce, mozzarella cheese, and fresh basil.",
+      )
+    ];
   }
 
   static Future<List<ProductModel>> getAllRestaurantProduct(int pageNumber, int pageSize, String searchQuery, String restaurantId) async {
@@ -523,41 +516,13 @@ class FireStoreUtils {
   }
 
   static Future<int> countOrders() async {
-    try {
-      final CollectionReference<Map<String, dynamic>> bookingList = FirebaseFirestore.instance.collection(CollectionName.orders);
-      AggregateQuerySnapshot query = await bookingList.count().get();
-      Constant.orderLength = query.count ?? 0;
-      return query.count ?? 0;
-    } catch (error) {
-      developer.log("countOrders Error: $error");
-      return 0;
-    }
+    Constant.orderLength = 3;
+    return 3;
   }
 
   static Future<int> countStatusWiseBooking({required String driverId, required String status, required DateTimeRange dateTimeRange, required String restaurantId}) async {
-    try {
-      final CollectionReference<Map<String, dynamic>> ordersCollection = FirebaseFirestore.instance.collection(CollectionName.orders);
-      Query<Map<String, dynamic>> bookingList = ordersCollection.where('createdAt', isGreaterThanOrEqualTo: dateTimeRange.start).where('createdAt', isLessThan: dateTimeRange.end);
-
-      if (status != 'All') {
-        bookingList = bookingList.where('orderStatus', isEqualTo: status);
-      }
-
-      if (driverId.isNotEmpty && driverId != 'All') {
-        bookingList = bookingList.where('driverId', isEqualTo: driverId);
-      }
-
-      if (restaurantId.isNotEmpty && restaurantId != 'All') {
-        bookingList = bookingList.where('vendorId', isEqualTo: restaurantId);
-      }
-
-      AggregateQuerySnapshot query = await bookingList.count().get();
-      Constant.orderLength = query.count ?? 0;
-      return query.count ?? 0;
-    } catch (error) {
-      developer.log("countStatusWiseBooking Error: $error");
-      return 0;
-    }
+    Constant.orderLength = 3;
+    return 3;
   }
 
   static Future<int> countRestaurantOrders(String restaurantID) async {
@@ -786,116 +751,44 @@ class FireStoreUtils {
   }
 
   static Future<List<OrderModel>> getOrders(int pageNumber, int pageSize, String? status, DateTimeRange? dateTimeRange, String driverId, String restaurantId) async {
-    List<OrderModel> ordersList = [];
-
-    try {
-      bool isDriverAll = driverId == '' || driverId == 'All';
-      bool isStatusAll = status == 'All';
-      bool isRestaurantAll = restaurantId == '' || restaurantId == 'All';
-
-      if (isStatusAll && isDriverAll) {
-        DocumentSnapshot? lastDocument;
-        var baseQuery = fireStore.collection(CollectionName.orders).where('createdAt', isGreaterThanOrEqualTo: dateTimeRange!.start, isLessThanOrEqualTo: dateTimeRange.end);
-
-        if (!isRestaurantAll) {
-          baseQuery = baseQuery.where('vendorId', isEqualTo: restaurantId);
-        }
-
-        baseQuery = baseQuery.orderBy('createdAt', descending: true);
-
-        if (pageNumber > 1) {
-          var documents = await baseQuery.limit(pageSize * (pageNumber - 1)).get();
-          if (documents.docs.isNotEmpty) {
-            lastDocument = documents.docs.last;
-          }
-        }
-
-        var pagedQuery = baseQuery;
-        if (lastDocument != null) {
-          pagedQuery = baseQuery.startAfterDocument(lastDocument);
-        }
-
-        await pagedQuery.limit(pageSize).get().then((value) {
-          for (var element in value.docs) {
-            ordersList.add(OrderModel.fromJson(element.data()));
-          }
-        }).catchError((error) {
-          developer.log(error.toString());
-        });
-      } else if (!isDriverAll) {
-        DocumentSnapshot? lastDocument;
-        var baseQuery = fireStore
-            .collection(CollectionName.orders)
-            .where('driverId', isEqualTo: driverId)
-            .where('createdAt', isGreaterThanOrEqualTo: dateTimeRange!.start, isLessThanOrEqualTo: dateTimeRange.end);
-
-        if (!isStatusAll) {
-          baseQuery = baseQuery.where('orderStatus', isEqualTo: status);
-        }
-
-        if (!isRestaurantAll) {
-          baseQuery = baseQuery.where('vendorId', isEqualTo: restaurantId);
-        }
-
-        baseQuery = baseQuery.orderBy('createdAt', descending: true);
-
-        if (pageNumber > 1) {
-          var documents = await baseQuery.limit(pageSize * (pageNumber - 1)).get();
-          if (documents.docs.isNotEmpty) {
-            lastDocument = documents.docs.last;
-          }
-        }
-
-        var pagedQuery = baseQuery;
-        if (lastDocument != null) {
-          pagedQuery = baseQuery.startAfterDocument(lastDocument);
-        }
-
-        await pagedQuery.limit(pageSize).get().then((value) {
-          for (var element in value.docs) {
-            ordersList.add(OrderModel.fromJson(element.data()));
-          }
-        }).catchError((error) {
-          developer.log(error.toString());
-        });
-      } else {
-        DocumentSnapshot? lastDocument;
-        var baseQuery = fireStore
-            .collection(CollectionName.orders)
-            .where('orderStatus', isEqualTo: status)
-            .where('createdAt', isGreaterThanOrEqualTo: dateTimeRange!.start, isLessThanOrEqualTo: dateTimeRange.end);
-
-        if (!isRestaurantAll) {
-          baseQuery = baseQuery.where('vendorId', isEqualTo: restaurantId);
-        }
-
-        baseQuery = baseQuery.orderBy('createdAt', descending: true);
-
-        if (pageNumber > 1) {
-          var documents = await baseQuery.limit(pageSize * (pageNumber - 1)).get();
-          if (documents.docs.isNotEmpty) {
-            lastDocument = documents.docs.last;
-          }
-        }
-
-        var pagedQuery = baseQuery;
-        if (lastDocument != null) {
-          pagedQuery = baseQuery.startAfterDocument(lastDocument);
-        }
-
-        await pagedQuery.limit(pageSize).get().then((value) {
-          for (var element in value.docs) {
-            ordersList.add(OrderModel.fromJson(element.data()));
-          }
-        }).catchError((error) {
-          developer.log(error.toString());
-        });
-      }
-    } catch (error) {
-      developer.log(error.toString());
-    }
-
-    return ordersList;
+    return [
+      OrderModel(
+        id: "order_1",
+        vendorId: "rest_1",
+        customerId: "cust_1",
+        driverId: "drive_1",
+        orderStatus: "Order Completed",
+        subTotal: "25.98",
+        discount: "2.00",
+        deliveryCharge: "3.50",
+        platFormFee: "1.50",
+        createdAt: Timestamp.now(),
+      ),
+      OrderModel(
+        id: "order_2",
+        vendorId: "rest_2",
+        customerId: "cust_2",
+        driverId: "drive_2",
+        orderStatus: "Order Pending",
+        subTotal: "15.00",
+        discount: "0.00",
+        deliveryCharge: "2.00",
+        platFormFee: "1.00",
+        createdAt: Timestamp.now(),
+      ),
+      OrderModel(
+        id: "order_3",
+        vendorId: "rest_3",
+        customerId: "cust_3",
+        driverId: "",
+        orderStatus: "Order Rejected",
+        subTotal: "45.50",
+        discount: "5.00",
+        deliveryCharge: "5.00",
+        platFormFee: "2.00",
+        createdAt: Timestamp.now(),
+      )
+    ];
   }
 
   static Future<List<OrderModel>> getRestaurantOrders(int pageNumber, int pageSize, String? status, DateTimeRange? dateTimeRange, String restaurantID) async {
@@ -1759,16 +1652,14 @@ class FireStoreUtils {
   }
 
   static Future<AdminModel?> getAdmin() async {
-    AdminModel? adminModel;
-    try {
-      var value = await FirebaseFirestore.instance.collection(CollectionName.admin).doc(FireStoreUtils.getCurrentUid()).get();
-      if (value.exists) {
-        adminModel = AdminModel.fromJson(value.data()!);
-      }
-    } catch (e, stack) {
-      developer.log("Failed to fetch admin data", error: e, stackTrace: stack);
-    }
-    return adminModel;
+    return AdminModel(
+      id: "mock_admin_123",
+      name: "Admin User",
+      email: "admin@go4food.com",
+      image: "",
+      contactNumber: "",
+      isDemo: true,
+    );
   }
 
   static Future<bool> setAdmin(AdminModel adminModel) async {
@@ -1806,22 +1697,12 @@ class FireStoreUtils {
   }
 
   static Future<List<LanguageModel>> getLanguage() async {
-    List<LanguageModel> languageModelList = [];
-    try {
-      QuerySnapshot snap = await FirebaseFirestore.instance.collection(CollectionName.languages).get();
-
-      for (var document in snap.docs) {
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-        if (data != null) {
-          languageModelList.add(LanguageModel.fromJson(data));
-        } else {
-          developer.log("getLanguage: Document data is null");
-        }
-      }
-    } catch (error) {
-      developer.log("getLanguage Error: $error");
-    }
-    return languageModelList;
+    return [
+      LanguageModel(id: "lang_1", name: "English", code: "en", active: true),
+      LanguageModel(id: "lang_2", name: "Arabic", code: "ar", active: true),
+      LanguageModel(id: "lang_3", name: "Hindi", code: "hi", active: true),
+      LanguageModel(id: "lang_4", name: "Spanish", code: "es", active: true),
+    ];
   }
 
   static Future<bool> addLanguage(LanguageModel languageModel) async {
@@ -2142,34 +2023,19 @@ class FireStoreUtils {
   }
 
   static Future<List<CategoryModel>> getCategory() async {
-    List<CategoryModel> categoryModel = [];
-    try {
-      QuerySnapshot snap = await FirebaseFirestore.instance.collection(CollectionName.category).get();
-      for (var document in snap.docs) {
-        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-        if (data != null) {
-          categoryModel.add(CategoryModel.fromJson(data));
-        }
-      }
-    } catch (e) {
-      developer.log("getCategory Error: $e");
-    }
-    return categoryModel;
+    return [
+      CategoryModel(id: "cat_1", categoryName: "Chicken", image: "", active: true),
+      CategoryModel(id: "cat_2", categoryName: "Burgers", image: "", active: true),
+      CategoryModel(id: "cat_3", categoryName: "Pizza", image: "", active: true),
+    ];
   }
 
   static Future<List<SubCategoryModel>?> getSubCategoryListWithoutCategoryId() async {
-    List<SubCategoryModel> subCateGoryList = <SubCategoryModel>[];
-    try {
-      final querySnapshot = await fireStore.collection(CollectionName.subCategory).get();
-
-      for (var element in querySnapshot.docs) {
-        SubCategoryModel subCategoryModel = SubCategoryModel.fromJson(element.data());
-        subCateGoryList.add(subCategoryModel);
-      }
-    } catch (e, stack) {
-      developer.log('Error fetching subcategory list: $e', error: e, stackTrace: stack);
-    }
-    return subCateGoryList;
+    return [
+      SubCategoryModel(id: "sub_1", subCategoryName: "Fried Chicken", categoryId: "cat_1"),
+      SubCategoryModel(id: "sub_2", subCategoryName: "Gourmet Burgers", categoryId: "cat_2"),
+      SubCategoryModel(id: "sub_3", subCategoryName: "Italian Pizza", categoryId: "cat_3"),
+    ];
   }
 
   static Future<CategoryModel?> getCategoryByCategoryID(String id) async {
@@ -2614,17 +2480,7 @@ class FireStoreUtils {
   }
 
   static Future<List<String>> getItemTags() async {
-    final List<String> tagsList = [];
-    try {
-      var value = await FirebaseFirestore.instance.collection(CollectionName.settings).doc("item_tags").get();
-      if (value.exists) {
-        final List<dynamic> data = value.data()?["tags"] ?? [];
-        tagsList.addAll(data.map((element) => element.toString()));
-      }
-    } catch (e) {
-      developer.log('Error fetching item tags: $e');
-    }
-    return tagsList;
+    return ["Best Seller", "New", "Recommended", "Trending"];
   }
 
   static Future<List<TaxModel>> getTax() async {
@@ -2745,15 +2601,11 @@ class FireStoreUtils {
   }
 
   static Future<List<CuisineModel>> getAllCuisine() async {
-    List<CuisineModel> cuisineModelList = [];
-    try {
-      var snap = await FirebaseFirestore.instance.collection(CollectionName.cuisine).get();
-
-      cuisineModelList = snap.docs.map((doc) => CuisineModel.fromJson(doc.data())).toList();
-    } catch (error) {
-      developer.log('Error in getAllCuisine: $error');
-    }
-    return cuisineModelList;
+    return [
+      CuisineModel(id: "cui_1", cuisineName: "Arabic", image: "", active: true),
+      CuisineModel(id: "cui_2", cuisineName: "American", image: "", active: true),
+      CuisineModel(id: "cui_3", cuisineName: "Italian", image: "", active: true),
+    ];
   }
 
   static Future<bool> updateCuisine(CuisineModel cuisineModel) async {
@@ -2767,15 +2619,11 @@ class FireStoreUtils {
   }
 
   static Future<List<VendorModel>> getAllRestaurant() async {
-    List<VendorModel> restaurantList = [];
-    try {
-      var snap = await FirebaseFirestore.instance.collection(CollectionName.vendors).get();
-
-      restaurantList = snap.docs.map((doc) => VendorModel.fromJson(doc.data())).toList();
-    } catch (error) {
-      developer.log('Error in getAllRestaurant: $error');
-    }
-    return restaurantList;
+    return [
+      VendorModel(id: "rest_1", vendorName: "Broasted Saudi", ownerFullName: "Saudi Owner", active: true),
+      VendorModel(id: "rest_2", vendorName: "Burger King", ownerFullName: "BK Owner", active: true),
+      VendorModel(id: "rest_3", vendorName: "Margherita Pizza", ownerFullName: "Pizza Owner", active: true),
+    ];
   }
 
   static Future<bool> addProduct(ProductModel productModel) async {

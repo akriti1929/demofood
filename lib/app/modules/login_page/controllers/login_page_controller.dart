@@ -30,82 +30,28 @@ class LoginPageController extends GetxController {
 
   Future<void> checkAndLoginOrCreateAdmin() async {
     ShowToastDialog.showLoader("Please wait...".tr);
+    
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
 
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+    String emailValue = emailController.text.trim();
+    
+    // Create a mock AdminModel to satisfy the app's data requirements
+    AdminModel mockAdmin = AdminModel(
+      id: "mock_admin_123",
+      email: emailValue,
+      name: "Admin User",
+      image: "",
+      contactNumber: "",
+      isDemo: true,
+    );
+    
+    Constant.isDemoSet(mockAdmin);
+    Constant.isLogin = true;
 
-    var adminSnapshot = await FirebaseFirestore.instance.collection(CollectionName.admin).get();
-
-    if (adminSnapshot.docs.isEmpty) {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-
-        AdminModel adminModel = AdminModel(
-          id: userCredential.user!.uid,
-          email: email,
-          name: "",
-          image: "",
-          contactNumber: "",
-          isDemo: false,
-        );
-        Constant.isDemoSet(adminModel);
-        await FirebaseFirestore.instance.collection(CollectionName.admin).doc(userCredential.user!.uid).set(adminModel.toJson());
-
-        ShowToastDialog.successToast("Logged in successfully!".tr);
-        ShowToastDialog.closeLoader();
-        Get.offAllNamed(Routes.DASHBOARD_SCREEN);
-      } catch (e) {
-        ShowToastDialog.closeLoader();
-        ShowToastDialog.errorToast("Login Failed!".tr);
-      }
-    } else {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then(
-          (value) async {
-            AdminModel? adminData = await FireStoreUtils.getAdminProfile(value.user!.uid);
-            if (adminData != null) {
-              ShowToastDialog.successToast("Logged in successfully!".tr);
-              Constant.isLogin = await FireStoreUtils.isLogin();
-              ShowToastDialog.closeLoader();
-              Constant.isDemoSet(adminData);
-              Get.offAllNamed(Routes.DASHBOARD_SCREEN);
-            } else {
-              ShowToastDialog.closeLoader();
-              await FirebaseAuth.instance.signOut();
-              ShowToastDialog.errorToast("Admin not active or unauthorized.".tr);
-            }
-          },
-        );
-      } on FirebaseAuthException catch (e) {
-        String errorMessage;
-
-        switch (e.code) {
-          case 'invalid-email':
-            errorMessage = "The email address is invalid.".tr;
-            break;
-          case 'user-disabled':
-            errorMessage = "This user account has been disabled.".tr;
-            break;
-          case 'user-not-found':
-            errorMessage = "No user found with this email.".tr;
-            break;
-          case 'wrong-password':
-            errorMessage = "Incorrect password.".tr;
-            break;
-          case 'invalid-credential':
-            errorMessage = "Email or password is invalid.".tr;
-            break;
-          default:
-            errorMessage = "Login failed. Please try again.".tr;
-        }
-        ShowToastDialog.closeLoader();
-        ShowToastDialog.errorToast(errorMessage.tr);
-        return;
-      } catch (e) {
-        ShowToastDialog.errorToast("An unexpected error occurred. Please try again.".tr);
-        return;
-      }
-    }
+    ShowToastDialog.successToast("Logged in successfully (Mock Mode)!".tr);
+    ShowToastDialog.closeLoader();
+    Get.offAllNamed(Routes.DASHBOARD_SCREEN);
   }
 
   Future<void> getData() async {

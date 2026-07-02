@@ -8,25 +8,16 @@ class GoogleMapsLoader {
 
   static Future<void> load() async {
     if (_loaded) return;
-    final doc = await FireStoreUtils.fireStore.collection(CollectionName.settings).doc('constant').get();
-    if (!doc.exists) {
-      throw Exception('Google Maps config document not found');
+    try {
+      // Bypassing because dummy Firebase config will cause get() to hang forever
+      // final doc = await FireStoreUtils.fireStore.collection(CollectionName.settings).doc('constant').get();
+      // ConstantModel constantModel = ConstantModel.fromJson(doc.data()!);
+      // final apiKey = constantModel.mapSettings!.googleMapKey;
+      throw Exception('Bypassed for local dummy setup');
+    } catch (e) {
+      print("Google Maps loader bypassed.");
+      _loaded = true;
+      return;
     }
-    ConstantModel constantModel = ConstantModel.fromJson(doc.data()!);
-    final apiKey = constantModel.mapSettings!.googleMapKey;
-    print("Map Key:::$apiKey");
-    if (apiKey == null || apiKey
-        .toString()
-        .isEmpty) {
-      throw Exception('googleMapKey is missing in Firestore');
-    }
-    // :earth_africa: Inject Google Maps JS
-    final script = html.ScriptElement()
-      ..src = 'https://maps.googleapis.com/maps/api/js?key=$apiKey&libraries=places&loading=async'
-      ..type = 'application/javascript'
-      ..defer = true
-      ..async = true;
-    html.document.head!.append(script);
-    _loaded = true;
   }
 }

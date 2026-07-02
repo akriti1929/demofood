@@ -16,16 +16,26 @@ class SplashScreenController extends GetxController {
 
   Future<void> getData() async {
     isLoading.value = true;
-    await FireStoreUtils.getSettings();
-    bool isLogin = await FireStoreUtils.isLogin();
+    bool isLogin = false;
+    
+    try {
+      // Bypassing Firebase calls so the app doesn't hang forever
+      await Future.delayed(const Duration(seconds: 1));
+      isLogin = false;
+      
+      if (isLogin) {
+        final admin = await FireStoreUtils.getAdmin();
+        if (admin != null) {
+          Constant.isDemoSet(admin);
+        }
+      }
+    } catch (e) {
+      // Ignore firebase errors since it's not configured
+    }
 
     if (!isLogin && Get.currentRoute != Routes.LOGIN_PAGE) {
       Get.offAllNamed(Routes.LOGIN_PAGE);
     } else if (isLogin) {
-      final admin = await FireStoreUtils.getAdmin();
-      if (admin != null) {
-        Constant.isDemoSet(admin);
-      }
       // Only navigate if currently in splash
       if (Get.currentRoute == Routes.SPLASH_SCREEN || Get.currentRoute.isEmpty) {
         Get.offAllNamed(Routes.DASHBOARD_SCREEN);

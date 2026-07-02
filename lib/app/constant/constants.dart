@@ -56,9 +56,9 @@ class Constant {
   static PaymentModel? paymentModel;
   static VendorModel? restaurantModel;
   static AdminCommission? adminCommission;
-  static AISettingModel? aiSetting;
-  static PlatFormFeeSettingModel? platFormFeeSettingModel;
-  static CurrencyModel? currencyModel;
+  static AISettingModel? aiSetting = AISettingModel(active: false, apiKey: "", gptModel: "gpt-3.5-turbo", maxToken: "100");
+  static PlatFormFeeSettingModel? platFormFeeSettingModel = PlatFormFeeSettingModel(platformFee: "0", platformFeeActive: false, packagingFeeActive: false);
+  static CurrencyModel? currencyModel = CurrencyModel(id: "", code: "INR", decimalDigits: 2, active: true, name: "Indian Rupee", symbol: "Rs.", symbolAtRight: false);
 
   static String? selectedMap;
   static String emailLoginType = 'email';
@@ -418,7 +418,7 @@ class Constant {
       if (value != null) {
         Constant.currencyModel = value;
       } else {
-        Constant.currencyModel = CurrencyModel(id: "", code: "USD", decimalDigits: 2, active: true, name: "US Dollar", symbol: "\$", symbolAtRight: false);
+        Constant.currencyModel = CurrencyModel(id: "", code: "INR", decimalDigits: 2, active: true, name: "Indian Rupee", symbol: "Rs.", symbolAtRight: false);
       }
     });
   }

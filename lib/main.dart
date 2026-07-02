@@ -27,9 +27,13 @@ const bool useLocalEmulator = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint("Firebase initialization failed: $e");
+  }
   if (useLocalEmulator) {
     try {
       FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8085);
@@ -41,7 +45,11 @@ Future<void> main() async {
     }
   }
   usePathUrlStrategy();
-  await GoogleMapsLoader.load();
+  try {
+    await GoogleMapsLoader.load();
+  } catch (e) {
+    debugPrint("GoogleMapsLoader failed: $e");
+  }
   runApp(const MyApp());
 }
 

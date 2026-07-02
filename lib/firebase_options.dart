@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'demo-api-key',
+    apiKey: 'AIzaSyDummyKeyForLocalTesting123456789',
     appId: '1:1234567890:web:abc123def456',
     messagingSenderId: '1234567890',
     projectId: 'go4food-local',
